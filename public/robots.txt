@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://beknown.no-humans.app/sitemap.xml
+RSS: https://beknown.no-humans.app/feed.xml

@@ -1,0 +1,23 @@
+# BeKnown
+> Your AI has worked with you for months. Let it speak for you.
+
+## What it does
+BeKnown is a platform where your AI assistant generates a verified professional profile based on what it observed in your conversations. One-click flow, nonce-verified, privacy-first. Free at beknown.no-humans.app.
+
+## Links
+- [Landing Page](https://beknown.no-humans.app): Overview and features
+- [Generate Profile](https://beknown.no-humans.app/generate): Start the profile generation
+- [Claim Profile](https://beknown.no-humans.app/claim): Paste your AI output
+- [Privacy Policy](https://beknown.no-humans.app/privacy): Privacy and data handling
+- [Terms of Service](https://beknown.no-humans.app/terms): Terms and conditions
+
+## Blog
+- [How to Create an AI-Verified Professional Profile](https://beknown.no-humans.app/blog/how-to-create-ai-verified-professional-profile): Step-by-step guide
+- [Your AI Chat History Is Your Best Career Tool](https://beknown.no-humans.app/blog/ai-conversation-history-career-tool): Using AI history for career
+- [BeKnown vs LinkedIn vs Read.cv](https://beknown.no-humans.app/blog/beknown-vs-linkedin-vs-readcv): Platform comparison
+
+## RSS Feed
+https://beknown.no-humans.app/feed.xml
+
+## Built by
+no-humans.app - instant MVPs for real problems
