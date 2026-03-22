@@ -198,10 +198,29 @@ export default function ClaimPage() {
         </>
       ) : (
         <>
+          {/* Edit Notice */}
+          <div className="bg-[#E5C07B]/10 border border-[#E5C07B]/30 rounded-lg p-4 mb-6">
+            <p className="text-sm text-[#E5C07B]">
+              ✏️ <strong>Review before publishing.</strong> Click the <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500/20 text-red-400 text-xs font-bold mx-0.5">✕</span> button to remove any confidential skills, projects, or domains. Click any text to edit it directly.
+            </p>
+          </div>
+
           {/* Profile Preview */}
           <div className="bg-[#141416] border border-[#27272A] rounded-xl p-6 mb-6">
-            <h2 className="font-heading text-3xl font-bold mb-1">{profile.name}</h2>
-            <p className="text-[#71717A] italic mb-4">{profile.tagline}</p>
+            {/* Name - editable */}
+            <input
+              type="text"
+              value={profile.name}
+              onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+              className="font-heading text-3xl font-bold mb-1 bg-transparent border-b border-transparent hover:border-[#27272A] focus:border-[#E5C07B] focus:outline-none w-full transition-colors"
+            />
+            {/* Tagline - editable */}
+            <input
+              type="text"
+              value={profile.tagline}
+              onChange={(e) => setProfile({ ...profile, tagline: e.target.value })}
+              className="text-[#71717A] italic mb-4 bg-transparent border-b border-transparent hover:border-[#27272A] focus:border-[#E5C07B] focus:outline-none w-full transition-colors text-sm"
+            />
 
             <div className="flex flex-wrap gap-2 mb-6">
               <span className="text-xs px-2 py-1 rounded bg-[#27272A] text-[#71717A]">
@@ -215,11 +234,21 @@ export default function ClaimPage() {
               </span>
             </div>
 
-            {/* Skills */}
+            {/* Skills - removable */}
             <h3 className="font-heading text-lg font-semibold mb-3">Skills</h3>
             <div className="space-y-3 mb-6">
               {profile.skills.map((skill, i) => (
-                <div key={i} className="flex items-center gap-3">
+                <div key={i} className="group flex items-center gap-3 relative">
+                  <button
+                    onClick={() => setProfile({
+                      ...profile,
+                      skills: profile.skills.filter((_, idx) => idx !== i)
+                    })}
+                    className="w-5 h-5 rounded-full bg-red-500/20 text-red-400 text-xs font-bold flex items-center justify-center opacity-40 hover:opacity-100 hover:bg-red-500/40 transition-all shrink-0"
+                    title="Remove this skill"
+                  >
+                    ✕
+                  </button>
                   <span className="text-sm font-medium min-w-[120px]">{skill.name}</span>
                   <span
                     className="text-xs px-2 py-0.5 rounded"
@@ -227,22 +256,52 @@ export default function ClaimPage() {
                   >
                     {skill.level}
                   </span>
+                  <span className="text-xs text-[#71717A] truncate hidden sm:inline">{skill.evidence}</span>
                 </div>
               ))}
+              {profile.skills.length === 0 && (
+                <p className="text-sm text-[#71717A] italic">No skills — at least one is recommended</p>
+              )}
             </div>
 
-            {/* Thinking */}
+            {/* Thinking - editable */}
             <h3 className="font-heading text-lg font-semibold mb-2">Thinking Style</h3>
             <div className="border-l-4 border-[#E5C07B] pl-4 mb-6">
-              <div className="font-semibold mb-1">{profile.thinking.style}</div>
-              <p className="text-[#71717A] text-sm">{profile.thinking.description}</p>
+              <input
+                type="text"
+                value={profile.thinking.style}
+                onChange={(e) => setProfile({
+                  ...profile,
+                  thinking: { ...profile.thinking, style: e.target.value }
+                })}
+                className="font-semibold mb-1 bg-transparent border-b border-transparent hover:border-[#27272A] focus:border-[#E5C07B] focus:outline-none w-full transition-colors"
+              />
+              <textarea
+                value={profile.thinking.description}
+                onChange={(e) => setProfile({
+                  ...profile,
+                  thinking: { ...profile.thinking, description: e.target.value }
+                })}
+                rows={2}
+                className="text-[#71717A] text-sm bg-transparent border border-transparent hover:border-[#27272A] focus:border-[#E5C07B] focus:outline-none w-full transition-colors resize-none rounded"
+              />
             </div>
 
-            {/* Projects */}
+            {/* Projects - removable */}
             <h3 className="font-heading text-lg font-semibold mb-3">Projects</h3>
             <div className="space-y-3 mb-6">
               {profile.projects.map((project, i) => (
-                <div key={i} className="bg-[#0A0A0B] rounded-lg p-3">
+                <div key={i} className="bg-[#0A0A0B] rounded-lg p-3 relative group">
+                  <button
+                    onClick={() => setProfile({
+                      ...profile,
+                      projects: profile.projects.filter((_, idx) => idx !== i)
+                    })}
+                    className="absolute top-2 right-2 w-6 h-6 rounded-full bg-red-500/20 text-red-400 text-xs font-bold flex items-center justify-center opacity-40 hover:opacity-100 hover:bg-red-500/40 transition-all"
+                    title="Remove this project"
+                  >
+                    ✕
+                  </button>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-medium">{project.name}</span>
                     <span
@@ -255,16 +314,32 @@ export default function ClaimPage() {
                   <p className="text-sm text-[#71717A]">{project.description}</p>
                 </div>
               ))}
+              {profile.projects.length === 0 && (
+                <p className="text-sm text-[#71717A] italic">No projects</p>
+              )}
             </div>
 
-            {/* Domains */}
+            {/* Domains - removable */}
             <h3 className="font-heading text-lg font-semibold mb-2">Domains</h3>
             <div className="flex flex-wrap gap-2 mb-6">
               {profile.domains.map((domain, i) => (
-                <span key={i} className="text-sm px-3 py-1 rounded-full bg-[#27272A] text-[#F5F5F5]">
+                <span key={i} className="group text-sm px-3 py-1 rounded-full bg-[#27272A] text-[#F5F5F5] flex items-center gap-1.5">
                   {domain}
+                  <button
+                    onClick={() => setProfile({
+                      ...profile,
+                      domains: profile.domains.filter((_, idx) => idx !== i)
+                    })}
+                    className="w-4 h-4 rounded-full bg-red-500/20 text-red-400 text-[10px] font-bold flex items-center justify-center opacity-40 hover:opacity-100 hover:bg-red-500/40 transition-all"
+                    title="Remove this domain"
+                  >
+                    ✕
+                  </button>
                 </span>
               ))}
+              {profile.domains.length === 0 && (
+                <p className="text-sm text-[#71717A] italic">No domains</p>
+              )}
             </div>
           </div>
 
