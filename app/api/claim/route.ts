@@ -64,6 +64,10 @@ export async function POST(request: Request) {
     slug = `${slug}-${suffix}`;
   }
 
+  // Generate edit token for profile management
+  const editToken = 'BK-EDIT-' + Array.from(crypto.getRandomValues(new Uint8Array(16)))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+
   // Insert profile - matches actual DB schema
   const { error: insertError } = await supabase
     .from('mvp_beknown_profiles')
@@ -81,6 +85,7 @@ export async function POST(request: Request) {
       claimed: true,
       published: true,
       raw_json: body,
+      edit_token: editToken,
     });
 
   if (insertError) {
@@ -91,5 +96,6 @@ export async function POST(request: Request) {
   return Response.json({
     slug,
     url: `https://beknown.no-humans.app/p/${slug}`,
+    editToken,
   });
 }

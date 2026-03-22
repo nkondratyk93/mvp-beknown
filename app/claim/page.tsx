@@ -36,20 +36,37 @@ export default function ClaimPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [published, setPublished] = useState<{ slug: string; editToken: string } | null>(null);
+  const [editTokenCopied, setEditTokenCopied] = useState(false);
 
   const handleParse = () => {
     setError(null);
     try {
-      const parsed = JSON.parse(jsonInput);
+      // Strip markdown code blocks if the AI wrapped it
+      let cleaned = jsonInput.trim();
+      if (cleaned.startsWith('```')) {
+        cleaned = cleaned.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '');
+      }
+      const parsed = JSON.parse(cleaned);
       const required = ['nonce', 'name', 'tagline', 'skills', 'thinking', 'projects', 'domains', 'learning', 'meta'];
       const missing = required.filter((k) => !parsed[k]);
       if (missing.length > 0) {
-        setError(`Missing fields: ${missing.join(', ')}`);
+        setError(`Missing fields: ${missing.join(', ')}. Make sure you copied the complete JSON output.`);
+        return;
+      }
+      if (!parsed.nonce || !parsed.nonce.startsWith('BK-')) {
+        setError('Invalid verification code. The JSON must contain the nonce from the generate page (starts with BK-).');
         return;
       }
       setProfile(parsed);
-    } catch {
-      setError('Invalid JSON. Make sure you copied the entire output from your AI.');
+    } catch (e) {
+      if (jsonInput.trim().length === 0) {
+        setError('Please paste the JSON output from your AI assistant.');
+      } else if (jsonInput.trim().startsWith('{')) {
+        setError('Invalid JSON — looks like it\'s cut off. Make sure you copied the ENTIRE output.');
+      } else {
+        setError('That doesn\'t look like JSON. Copy the raw JSON output from your AI (starts with { and ends with }).');
+      }
     }
   };
 
@@ -65,14 +82,31 @@ export default function ClaimPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || 'Failed to publish profile');
+        if (data.error === 'Nonce expired. Please generate a new prompt.') {
+          setError('Your verification code expired. Go back to the generate page and get a fresh one.');
+        } else if (data.error === 'Nonce already used') {
+          setError('This verification code was already used. Generate a new prompt to create another profile.');
+        } else {
+          setError(data.error || 'Failed to publish profile');
+        }
         return;
       }
-      router.push(`/p/${data.slug}`);
+      setPublished({ slug: data.slug, editToken: data.editToken });
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setPublishing(false);
+    }
+  };
+
+  const handleCopyEditToken = async () => {
+    if (!published) return;
+    try {
+      await navigator.clipboard.writeText(published.editToken);
+      setEditTokenCopied(true);
+      setTimeout(() => setEditTokenCopied(false), 3000);
+    } catch {
+      // Fallback for mobile
     }
   };
 
@@ -83,7 +117,62 @@ export default function ClaimPage() {
         Paste the JSON output from your AI assistant below.
       </p>
 
-      {!profile ? (
+      {published ? (
+        <>
+          <div className="bg-[#141416] border border-[#10A37F]/30 rounded-xl p-6 mb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-3xl">🎉</span>
+              <h2 className="font-heading text-2xl font-bold text-[#10A37F]">Profile Published!</h2>
+            </div>
+            <p className="text-[#71717A] mb-4">
+              Your BeKnown profile is now live at:
+            </p>
+            <Link
+              href={`/p/${published.slug}`}
+              className="text-[#E5C07B] hover:underline font-mono text-lg block mb-6"
+            >
+              beknown.no-humans.app/p/{published.slug}
+            </Link>
+
+            <div className="bg-[#0A0A0B] border border-[#27272A] rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-heading font-semibold text-sm text-[#F5F5F5]">🔑 Your Edit Token</h3>
+                <button
+                  onClick={handleCopyEditToken}
+                  className="text-xs text-[#E5C07B] hover:underline"
+                >
+                  {editTokenCopied ? '✅ Copied!' : 'Copy'}
+                </button>
+              </div>
+              <code className="font-mono text-xs text-[#71717A] break-all block mb-3">
+                {published.editToken}
+              </code>
+              <p className="text-xs text-red-400">
+                ⚠️ Save this token! You need it to edit or delete your profile later. It cannot be recovered.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <Link
+              href={`/p/${published.slug}`}
+              className="flex-1 py-3 rounded-lg font-heading font-semibold bg-[#E5C07B] text-[#0A0A0B] hover:opacity-90 transition-all duration-200 text-center"
+            >
+              View My Profile
+            </Link>
+            <button
+              onClick={() => {
+                const url = `https://beknown.no-humans.app/p/${published.slug}`;
+                const text = `Check out my AI-witnessed professional profile on BeKnown`;
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+              }}
+              className="flex-1 py-3 rounded-lg font-heading font-semibold border border-[#27272A] text-[#71717A] hover:text-[#F5F5F5] transition-all duration-200"
+            >
+              Share on X
+            </button>
+          </div>
+        </>
+      ) : !profile ? (
         <>
           <textarea
             value={jsonInput}

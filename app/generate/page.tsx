@@ -58,7 +58,9 @@ Rules:
 - The tagline should be specific and memorable, not "passionate professional."
 - For projects, only include things I actually built, not just mentioned.
 - Thinking style should describe HOW I think, not WHAT I think about.
-- Include ALL domains I operate in — work, side projects, hobbies. Show the full person.`;
+- Include ALL domains I operate in — work, side projects, hobbies. Show the full person.
+
+After generating, go to https://beknown.no-humans.app/claim and paste the JSON output to publish your profile.`;
 }
 
 export default function GeneratePage() {

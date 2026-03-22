@@ -90,12 +90,20 @@ export default function HomePage() {
           <Link href="/" className="font-heading text-lg font-bold text-[#F5F5F5] flex items-center gap-2">
             <span className="text-xl">👁️</span> BeKnown
           </Link>
-          <Link
-            href="/generate"
-            className="text-sm font-medium text-[#E5C07B] hover:text-[#F5F5F5] transition-colors"
-          >
-            Get Yours →
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link
+              href="/explore"
+              className="text-sm font-medium text-[#71717A] hover:text-[#F5F5F5] transition-colors"
+            >
+              Explore
+            </Link>
+            <Link
+              href="/generate"
+              className="text-sm font-medium text-[#E5C07B] hover:text-[#F5F5F5] transition-colors"
+            >
+              Get Yours →
+            </Link>
+          </div>
         </div>
       </header>
 

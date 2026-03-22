@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import ProfileSkills from './profile-skills';
+import ProfileActions from './profile-actions';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -188,8 +189,11 @@ export default async function ProfilePage({
         </div>
       </section>
 
+      {/* Share & Manage */}
+      <ProfileActions slug={slug} name={profile.name} />
+
       {/* CTA */}
-      <div className="text-center mt-16">
+      <div className="text-center mt-12">
         <Link
           href="/"
           className="inline-flex items-center justify-center px-8 py-4 rounded-lg font-heading font-semibold text-lg bg-[#E5C07B] text-[#0A0A0B] hover:opacity-90 transition-all duration-200 hover:scale-[1.02]"
