@@ -81,6 +81,7 @@ function GenerateContent() {
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [copied, setCopied] = useState(false);
+  const [showNextSteps, setShowNextSteps] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -123,6 +124,7 @@ function GenerateContent() {
     try {
       await navigator.clipboard.writeText(buildPrompt(nonce));
       setCopied(true);
+      setShowNextSteps(true);
       setTimeout(() => setCopied(false), 3000);
     } catch {
       setError('Failed to copy to clipboard');
@@ -188,7 +190,7 @@ function GenerateContent() {
           </button>
 
           {/* Next Steps */}
-          {copied && (
+          {showNextSteps && (
             <div className="bg-[#141416] border border-[#E5C07B]/30 rounded-lg p-6 animate-fade-in-up">
               <h2 className="font-heading text-xl font-semibold mb-3">Next steps</h2>
               <ol className="list-decimal list-inside space-y-2 text-[#71717A]">
