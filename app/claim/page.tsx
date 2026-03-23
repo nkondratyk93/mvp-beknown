@@ -92,6 +92,11 @@ export default function ClaimPage() {
         return;
       }
       setPublished({ slug: data.slug, editToken: data.editToken });
+      try {
+        localStorage.setItem(`beknown_edit_token_${data.slug}`, data.editToken);
+      } catch {
+        // localStorage may be unavailable in some browsers
+      }
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -148,7 +153,7 @@ export default function ClaimPage() {
                 {published.editToken}
               </code>
               <p className="text-xs text-red-400">
-                ⚠️ Save this token! You need it to edit or delete your profile later. It cannot be recovered.
+                ⚠️ Your edit token is saved in this browser. You can delete your profile anytime from your profile page. If you want to manage it from another device, save this token:
               </p>
             </div>
           </div>

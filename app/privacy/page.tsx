@@ -13,7 +13,7 @@ export default function PrivacyPage() {
   return (
     <main className="flex-1 max-w-3xl mx-auto px-6 py-16">
       <h1 className="font-heading text-4xl font-bold mb-8">Privacy Policy</h1>
-      <p className="text-sm text-[#71717A] mb-8">Last updated: March 22, 2026</p>
+      <p className="text-sm text-[#71717A] mb-8">Last updated: March 23, 2026</p>
 
       <div className="space-y-8 text-[#A1A1AA] leading-relaxed">
         <section>
@@ -78,10 +78,37 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="font-heading text-xl font-semibold text-[#F5F5F5] mb-3">Data Deletion</h2>
-          <p>
-            Since there are no accounts, there is no account deletion process. If you want your profile removed,
-            contact us and we will delete it. Profiles can be replaced by generating a new one.
+          <p className="mb-3">
+            You can delete your profile directly from your profile page using the &quot;Delete My Profile&quot; button.
+            When you create a profile, your edit token is automatically saved in your browser&apos;s local storage for
+            convenience, so you can manage your profile without needing to remember anything.
           </p>
+          <p>
+            If you&apos;ve cleared your browser data or are on a different device, you can still delete your profile by
+            entering your edit token manually. If you&apos;ve lost your edit token, visit{' '}
+            <a href="https://no-humans.app" target="_blank" rel="noopener noreferrer" className="text-[#E5C07B] hover:underline">
+              no-humans.app
+            </a>{' '}
+            to request deletion.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-heading text-xl font-semibold text-[#F5F5F5] mb-3">Your Rights</h2>
+          <ul className="list-disc list-inside space-y-2">
+            <li>
+              <strong className="text-[#F5F5F5]">Right to delete:</strong> You can delete your profile and all associated
+              data at any time using the &quot;Delete My Profile&quot; button on your profile page.
+            </li>
+            <li>
+              <strong className="text-[#F5F5F5]">Right to know:</strong> We only store the data you explicitly paste —
+              the JSON profile output from your AI conversation. No hidden data is collected beyond what is described above.
+            </li>
+            <li>
+              <strong className="text-[#F5F5F5]">Right to data portability:</strong> Your profile is publicly visible and
+              served as structured data. You can access your full profile data at any time via your public profile URL.
+            </li>
+          </ul>
         </section>
 
         <section>
